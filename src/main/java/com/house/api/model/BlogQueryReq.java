@@ -1,37 +1,17 @@
 package com.house.api.model;
 
+
+import lombok.Data;
+import lombok.ToString;
+
+/**
+ * @Description 百科查询实体
+ * @Author wujin
+ **/
+@Data
+@ToString
 public class BlogQueryReq {
-  
-  private Blog blog;
-  
-  private Integer limit;
-  
-  private Integer offset;
-
-
-  public Integer getLimit() {
-    return limit;
-  }
-
-  public void setLimit(Integer limit) {
-    this.limit = limit;
-  }
-
-  public Integer getOffset() {
-    return offset;
-  }
-
-  public void setOffset(Integer offset) {
-    this.offset = offset;
-  }
-
-  public Blog getBlog() {
-    return blog;
-  }
-
-  public void setBlog(Blog blog) {
-    this.blog = blog;
-  }
-  
-
+    private Blog blog;
+    private Integer limit;
+    private Integer offset;
 }
