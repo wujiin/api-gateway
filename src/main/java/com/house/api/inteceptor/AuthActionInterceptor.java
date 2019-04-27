@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
  **/
 @Component
 public class AuthActionInterceptor implements HandlerInterceptor {
-  
+
 
 
 /**
@@ -44,7 +44,7 @@ public class AuthActionInterceptor implements HandlerInterceptor {
   @Override
   public void postHandle(HttpServletRequest req, HttpServletResponse res, Object handler,
           ModelAndView modelAndView) throws Exception {
-     
+
   }
 
   @Override

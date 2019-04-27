@@ -1,6 +1,7 @@
 package com.house.api.model;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
@@ -10,6 +11,7 @@ import lombok.ToString;
  **/
 @Data
 @ToString
+@AllArgsConstructor
 public class BlogQueryReq {
     private Blog blog;
     private Integer limit;

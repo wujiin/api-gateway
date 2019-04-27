@@ -2,7 +2,7 @@ package com.house.api.service;
 
 import java.util.List;
 
-import com.house.api.dao.UserDao;
+import com.house.api.feignclient.UserClient;
 import com.house.api.model.User;
 import com.house.api.utils.BeanHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 
+import static com.house.api.common.RestCode.*;
+
 /**
- *@Description 用户登录，注册，个人信息服务
- *@Author wujin
+ * @Description 用户登录，注册，个人信息服务
+ * @Author wujin
  **/
 @Service
 public class AccountService {
@@ -27,10 +29,8 @@ public class AccountService {
     @Autowired
     private FileService fileService;
 
-
     @Autowired
-    private UserDao userDao;
-
+    private UserClient userClient;
 
     public User getUserById(Long id) {
         User queryUser = new User();
@@ -42,13 +42,16 @@ public class AccountService {
         return null;
     }
 
+    /**
+     * @Description 查询用户
+     **/
     public List<User> getUserByQuery(User query) {
-        List<User> users = userDao.getUserList(query);
+        List<User> users = userClient.getUserList(query).getResult();
         return users;
     }
 
     /**
-     *@Description 添加用户
+     * @Description 添加用户
      **/
     public boolean addAccount(User account) {
         //头像上传
@@ -59,7 +62,7 @@ public class AccountService {
         account.setEnableUrl("http://" + domainName + "/accounts/verify");
         BeanHelper.setDefaultProp(account, User.class);
         //添加用户信息
-        userDao.addUser(account);
+        userClient.addUser(account);
         return true;
     }
 
@@ -71,6 +74,9 @@ public class AccountService {
         return getUser(email) != null;
     }
 
+    /**
+     * @Description 用户信息查询
+     **/
     private User getUser(String email) {
         User queryUser = new User();
         queryUser.setEmail(email);
@@ -79,58 +85,53 @@ public class AccountService {
     }
 
     /**
-     * @param key
-     * @return 返回成功与失败
-     */
+     * @Description 返回成功与失败
+     **/
     public boolean enable(String key) {
-        userDao.enable(key);
-        return true;
+        return userClient.enable(key).getCode() == OK.code;
     }
 
-
     /**
-     * 调用重置通知接口
-     *
-     * @param email
-     */
+     * @Description 调用重置通知接口
+     **/
     @Async
     public void remember(String email) {
-        userDao.resetNotify(email, "http://" + domainName + "/accounts/reset");
+        userClient.resetNotify(email, "http://" + domainName + "/accounts/reset");
     }
 
     /**
-     * 重置密码操作
-     *
-     * @param email
-     * @param key
-     */
+     * @Description 重置密码操作
+     **/
     public User reset(String key, String password) {
-        return userDao.reset(key, password);
-    }
-
-
-    public String getResetEmail(String key) {
-        String email = userDao.getEmail(key);
-        return email;
-    }
-
-
-    public User updateUser(User user) {
-        BeanHelper.onUpdate(user);
-        return userDao.updateUser(user);
-    }
-
-    public void logout(String token) {
-        userDao.logout(token);
+        return userClient.reset(key, password).getResult();
     }
 
     /**
-     * 校验用户名密码并返回用户对象
-     *
-     * @param username
-     * @param password
-     * @return
-     */
+     * @Description 获取redis token对应的账户
+     **/
+    public String getResetEmail(String key) {
+        return userClient.getEmail(key).getResult();
+    }
+
+    /**
+     * @Description 修改密码
+     **/
+    public User updateUser(User user) {
+        //设置更新用户信息时间
+        BeanHelper.onUpdate(user);
+        return userClient.updateUser(user).getResult();
+    }
+
+    /**
+     * @Description 登出
+     **/
+    public void logout(String token) {
+        userClient.logout(token);
+    }
+
+    /**
+     * @Description 校验用户名密码并返回用户对象
+     **/
     public User auth(String username, String password) {
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             return null;
@@ -139,7 +140,7 @@ public class AccountService {
         user.setEmail(username);
         user.setPasswd(password);
         try {
-            user = userDao.authUser(user);
+            user = userClient.authUser(user).getResult();
         } catch (Exception e) {
             return null;
         }

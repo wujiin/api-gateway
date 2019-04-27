@@ -5,7 +5,7 @@ public enum HouseUserType {
   
   public  final Integer value;
   
-  private HouseUserType(Integer value){
+   HouseUserType(Integer value){
     this.value = value;
   }
   

@@ -3,7 +3,7 @@ package com.house.api.service;
 
 import java.util.List;
 
-import com.house.api.dao.UserDao;
+import com.house.api.feignclient.UserClient;
 import com.house.api.model.Agency;
 import com.house.api.model.ListResponse;
 import com.house.api.model.User;
@@ -15,38 +15,44 @@ import com.house.api.common.PageParams;
 
 @Service
 public class AgencyService {
-  
-  @Autowired
-  private UserDao userDao;
-   
-  /**
-   *@Description 获取所有租房机构信息
-   **/
-  public List<Agency> getAllAgency(){
-    return userDao.getAllAgency();
-  }
 
-  public Agency getAgency(Integer id){
-    return userDao.getAgencyById(id);
-  }
+    @Autowired
+    private UserClient userClient;
 
-  public void add(Agency agency) {
-      userDao.addAgency(agency);
-  }
+    /**
+     * @Description 获取所有租房机构信息
+     **/
+    public List<Agency> getAllAgency() {
+        return userClient.agencyList().getResult();
+    }
 
-  public PageData<User> getAllAgent(PageParams pageParams) {
-    ListResponse<User> result =  userDao.getAgentList(pageParams.getLimit(),pageParams.getOffset());
-                  Long  count  =  result.getCount();
-    return PageData.<User>buildPage(result.getList(), count, pageParams.getPageSize(), pageParams.getPageNum());
-  }
+    /**
+     * @Description 查询机构信息
+     **/
+    public Agency getAgency(Integer id) {
+        return userClient.getAgencyById(id).getResult();
+    }
 
-  
-  
-  public User getAgentDetail(Long id) {
-    return userDao.getAgentById(id);
-  }
-  
-  
-  
-  
+    /**
+     * @Description 添加机构
+     **/
+    public void add(Agency agency) {
+        userClient.addAgency(agency);
+    }
+
+    /**
+     * @Description 获取经纪人列表
+     **/
+    public PageData<User> getAllAgent(PageParams pageParams) {
+        ListResponse<User> result = userClient.getAgentList(pageParams.getLimit(), pageParams.getOffset()).getResult();
+        Long count = result.getCount();
+        return PageData.buildPage(result.getList(), count, pageParams.getPageSize(), pageParams.getPageNum());
+    }
+
+    /**
+     * @Description 获取房产经纪人信息
+     **/
+    public User getAgentDetail(Long id) {
+        return userClient.getAgentById(id).getResult();
+    }
 }
