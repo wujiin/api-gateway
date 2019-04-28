@@ -1,12 +1,10 @@
 package com.house.api.model;
 
 import java.util.Date;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.alibaba.fastjson.annotation.JSONField;
 
 @Data
 @ToString
@@ -22,8 +20,9 @@ public class User {
     private Date createTime;
     private Integer enable;
     private String avatar;
-    @JSONField(deserialize = false, serialize = false)
-    private MultipartFile avatarFile;
+
+    @JsonIgnore
+    private transient  MultipartFile avatarFile;
     private String newPassword;
     private String key;
     private Long agencyId;

@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @Data
 @ToString
 @AllArgsConstructor
-public class CommentReq {
+public class CommentReq implements Serializable {
     private Long userId;
     private Long houseId;
     private Integer blogId;

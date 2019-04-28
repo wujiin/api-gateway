@@ -7,10 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.house.api.common.RestResponse;
+import com.house.api.config.GenericRest;
 import com.house.api.feignclient.UserClient;
 import com.house.api.model.User;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,10 +34,11 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private static final String TOKEN_COOKIE = "token";
 
-
     @Autowired
-    private UserClient userClient;
+    private GenericRest rest;
 
+    @Value("${user.service.name}")
+    private String userServiceName;
 
     /**
      * @Description 拦截请求鉴权处理
@@ -51,12 +57,8 @@ public class AuthInterceptor implements HandlerInterceptor {
         //获取cookie中的token
         Cookie cookie = WebUtils.getCookie(req, TOKEN_COOKIE);
         if (cookie != null && StringUtils.isNoneBlank(cookie.getValue())) {
-            //获取用户信息
-            User user = null;
-            RestResponse<User> rest = userClient.getUserByToken(cookie.getValue());
-            if (rest != null || rest.getCode() != 0) {
-                user = rest.getResult();
-            }
+            //获取用户信息  这里使用feign调用初始化的时候出现  服务调用死循环！ 改用restTemplete调用
+            User user = getUserByToken(cookie.getValue());
             //返回用户信息
             if (user != null) {
                 req.setAttribute(CommonConstants.LOGIN_USER_ATTRIBUTE, user);
@@ -64,6 +66,21 @@ public class AuthInterceptor implements HandlerInterceptor {
             }
         }
         return true;
+    }
+
+    /**
+     *@Description 调用鉴权服务
+     **/
+    @HystrixCommand(fallbackMethod = "getUserByTokenFb")
+    public User getUserByToken(String token) {
+        String url = "http://" + userServiceName + "/user/get?token=" + token;
+        ResponseEntity<RestResponse<User>> responseEntity = rest.get(url, new ParameterizedTypeReference<RestResponse<User>>() {
+        });
+        RestResponse<User> response = responseEntity.getBody();
+        if (response == null || response.getCode() != 0) {
+            return null;
+        }
+        return response.getResult();
     }
 
 

@@ -22,6 +22,7 @@ public class WebMvcConf extends WebMvcConfigurerAdapter {
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(authInterceptor).excludePathPatterns("/static").addPathPatterns("/**");
+
     registry
         .addInterceptor(authActionInterceptor)
         .addPathPatterns("/house/toAdd")

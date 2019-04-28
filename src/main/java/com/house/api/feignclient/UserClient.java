@@ -16,9 +16,6 @@ import java.util.List;
 @FeignClient(name = "user")
 public interface UserClient {
 
-    @RequestMapping(value = "/agency/list", method = RequestMethod.GET)
-    RestResponse<List<Agency>> agencyList();
-
     @RequestMapping(value = "/user/getList", method = RequestMethod.GET)
     RestResponse<List<User>> getUserList(@RequestBody User query);
 
@@ -44,10 +41,13 @@ public interface UserClient {
     RestResponse<User> getUserByToken(@RequestParam("token") String token);
 
     @RequestMapping(value = "/user/add", method = RequestMethod.GET)
-    RestResponse<User> addUser(@RequestBody User user);
+    RestResponse<User> addUser(User user);
 
     @RequestMapping(value = "/user/update", method = RequestMethod.GET)
     RestResponse<User> updateUser(@RequestBody User user);
+
+    @RequestMapping(value = "/agency/list", method = RequestMethod.GET)
+    RestResponse<List<Agency>> agencyList();
 
     @RequestMapping(value = "/agency/agentDetail", method = RequestMethod.GET)
     RestResponse<User> getAgentById(@RequestParam("id") Long id);

@@ -5,10 +5,7 @@ import java.util.List;
 import com.house.api.common.CommonConstants;
 import com.house.api.common.PageParams;
 import com.house.api.feignclient.CommentClient;
-import com.house.api.model.Blog;
-import com.house.api.model.BlogQueryReq;
-import com.house.api.model.Comment;
-import com.house.api.model.CommentReq;
+import com.house.api.model.*;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,7 +63,7 @@ public class CommentService {
      **/
     public PageData<Blog> queryBlogs(Blog query, PageParams build) {
         BlogQueryReq blogQueryReq = new BlogQueryReq(query, build.getLimit(), build.getOffset());
-        Pair<List<Blog>, Long> pair = commentClient.getBlogs(blogQueryReq).getResult();
-        return PageData.buildPage(pair.getKey(), pair.getValue(), build.getPageSize(), build.getPageNum());
+        ListResponse<Blog> result = commentClient.getBlogs(blogQueryReq).getResult();
+        return PageData.buildPage(result.getList(), result.getCount(), build.getPageSize(), build.getPageNum());
     }
 }

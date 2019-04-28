@@ -3,6 +3,7 @@ package com.house.api.model;
 import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  **/
 @Data
 @ToString
-public class Comment {
+public class Comment implements Serializable {
     private Long id;
     private String content;
     private Long houseId;

@@ -3,11 +3,12 @@ package com.house.api.model;
 import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @ToString
-public class UserMsg {
+public class UserMsg implements Serializable {
     private Long id;
     private String msg;
     private Long userId;
