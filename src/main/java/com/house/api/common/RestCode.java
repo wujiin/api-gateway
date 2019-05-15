@@ -1,5 +1,9 @@
 package com.house.api.common;
 
+/**
+ * @Description 返回状态码
+ * @Author wujin
+ **/
 public enum RestCode {
     OK(0, "OK"),
     UNKNOWN_ERROR(1, "用户服务异常"),

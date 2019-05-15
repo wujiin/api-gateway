@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Data;
 import lombok.ToString;
 
+/**
+ * @Description 返回的信息
+ * @Author wujin
+ **/
 @JsonInclude(Include.NON_NULL)
 @Data
 @ToString

@@ -103,7 +103,7 @@
 <script type="text/javascript" src="/static/assets/js/custom.js"></script>
 <script type="text/javascript" src="/static/assets/js/toastr.js"></script>
 <script type="text/javascript" src="/static/common/common.js"></script>
-
+<script type="text/javascript" src="/static/common/GeoUtils.js"></script>
 
 
 

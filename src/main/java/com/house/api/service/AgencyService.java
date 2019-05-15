@@ -13,6 +13,10 @@ import org.springframework.stereotype.Service;
 import com.house.api.common.PageData;
 import com.house.api.common.PageParams;
 
+/**
+ * @Description 机构服务
+ * @Author wujin
+ **/
 @Service
 public class AgencyService {
 

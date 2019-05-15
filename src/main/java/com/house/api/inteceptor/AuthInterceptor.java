@@ -7,16 +7,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.house.api.common.RestResponse;
-import com.house.api.config.GenericRest;
-import com.house.api.feignclient.UserClient;
 import com.house.api.model.User;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
@@ -34,11 +35,10 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private static final String TOKEN_COOKIE = "token";
 
-    @Autowired
-    private GenericRest rest;
-
     @Value("${user.service.name}")
     private String userServiceName;
+
+    private static final String directFlag = "direct://";
 
     /**
      * @Description 拦截请求鉴权处理
@@ -69,12 +69,14 @@ public class AuthInterceptor implements HandlerInterceptor {
     }
 
     /**
-     *@Description 调用鉴权服务
+     * @Description 调用鉴权服务
      **/
     @HystrixCommand(fallbackMethod = "getUserByTokenFb")
     public User getUserByToken(String token) {
+        RestTemplate restTemplate = new RestTemplate();
         String url = "http://" + userServiceName + "/user/get?token=" + token;
-        ResponseEntity<RestResponse<User>> responseEntity = rest.get(url, new ParameterizedTypeReference<RestResponse<User>>() {
+        url = url.replace(directFlag, "");
+        ResponseEntity<RestResponse<User>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, HttpEntity.EMPTY, new ParameterizedTypeReference<RestResponse<User>>() {
         });
         RestResponse<User> response = responseEntity.getBody();
         if (response == null || response.getCode() != 0) {

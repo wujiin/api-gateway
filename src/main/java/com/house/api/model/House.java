@@ -1,6 +1,6 @@
 package com.house.api.model;
 
-import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +36,7 @@ public class House {
     private String tags;
     private Date createTime;
     private Integer cityId;
+    private String cityCode;
     private Integer communityId;
     private String address;
 
@@ -55,6 +56,8 @@ public class House {
     private Long userId;
     private boolean bookmarked;
     private Integer state;
+    private BigDecimal lon;
+    private BigDecimal lat;
     private List<Long> ids;
     private String sort = "time_desc";//price_desc,price_asc,time_desc
 

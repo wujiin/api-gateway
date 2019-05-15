@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
- * @Description 结果返回
+ * @Description 返回结果
  * @Author wujin
  **/
 @Data

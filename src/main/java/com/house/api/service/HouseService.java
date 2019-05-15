@@ -14,7 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.common.base.Joiner;
 import com.house.api.common.PageData;
 
-
+/**
+ * @Description 房产服务
+ * @Author wujin
+ **/
 @Service
 public class HouseService {
 
@@ -108,8 +111,8 @@ public class HouseService {
     }
 
     /**
-     *@Description 收藏房产
-     *@Author wujin
+     * @Description 收藏房产
+     * @Author wujin
      **/
     public void bindUser2House(Long houseId, Long userId, boolean bookmark) {
         HouseUserReq req = new HouseUserReq(houseId, userId, bookmark ? HouseUserType.BOOKMARK.value : HouseUserType.SALE.value, false);

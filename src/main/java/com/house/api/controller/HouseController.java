@@ -2,6 +2,8 @@ package com.house.api.controller;
 
 import java.util.List;
 
+import com.ctrip.framework.apollo.Config;
+import com.ctrip.framework.apollo.spring.annotation.ApolloConfig;
 import com.house.api.common.CommonConstants;
 import com.house.api.common.PageParams;
 import com.house.api.common.ResultMsg;
@@ -16,6 +18,7 @@ import com.house.api.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -82,6 +85,16 @@ public class HouseController {
     }
 
     /**
+     * @Description 房产导航
+     **/
+    @RequestMapping(value = "house/navigation", method = {RequestMethod.POST, RequestMethod.GET})
+    public String houseNavigation(long id, ModelMap modelMap) {
+        House house = houseService.queryOneHouse(id);
+        modelMap.put("house", house);
+        return "house/navigation";
+    }
+
+    /**
      * @Description 房产信息评论
      **/
     @RequestMapping(value = "house/leaveMsg", method = {RequestMethod.POST, RequestMethod.GET})
@@ -136,7 +149,7 @@ public class HouseController {
     }
 
     /**
-     *@Description 删除个人房产信息
+     * @Description 删除个人房产信息
      **/
     @RequestMapping(value = "house/del", method = {RequestMethod.POST, RequestMethod.GET})
     public String delsale(Long id, String pageType) {
@@ -146,7 +159,7 @@ public class HouseController {
     }
 
     /**
-     *@Description 个人房产收藏列表页
+     * @Description 个人房产收藏列表页
      **/
     @RequestMapping(value = "house/bookmarked", method = {RequestMethod.POST, RequestMethod.GET})
     public String bookmarked(House house, PageParams pageParams, ModelMap modelMap) {
@@ -159,7 +172,7 @@ public class HouseController {
     }
 
     /**
-     *@Description 房产收藏
+     * @Description 房产收藏
      **/
     @RequestMapping(value = "house/bookmark", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
@@ -170,7 +183,7 @@ public class HouseController {
     }
 
     /**
-     *@Description 取消房产收藏
+     * @Description 取消房产收藏
      **/
     @RequestMapping(value = "house/unbookmark", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody

@@ -23,13 +23,6 @@ public interface CommonConstants {
      **/
     String AGENCY_COUNT = "979762929@qq.com";
 
-    Integer HOUSE_STATE_UP = 1;
-
-    Integer HOUSE_STATE_DOWN = 2;
-
     String LOGIN_USER_ATTRIBUTE = "loginUser";
-
-    String USER_ATTRIBUTE = "user";
-
 
 }

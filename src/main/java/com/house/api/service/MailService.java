@@ -11,10 +11,10 @@ public class MailService {
   
   @Autowired
   private JavaMailSender mailSender;
-  
-  @Value("${spring.mail.username}")
+
+  @Value("${spring.mail.username:1136226430@qq.com}")
   private String from;
-  
+
   public void sendSimpleMail(String subject,String content,String toEmail){
     SimpleMailMessage message = new SimpleMailMessage();
     message.setFrom(from);

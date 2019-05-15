@@ -6,12 +6,15 @@ import com.house.api.common.CommonConstants;
 import com.house.api.common.PageParams;
 import com.house.api.feignclient.CommentClient;
 import com.house.api.model.*;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.house.api.common.PageData;
 
+/**
+ * @Description 用户评论服务
+ * @Author wujin
+ **/
 @Service
 public class CommentService {
 
@@ -52,7 +55,7 @@ public class CommentService {
 
 
     /**
-     *@Description 查询博客详情
+     * @Description 查询博客详情
      **/
     public Blog queryOneBlog(int id) {
         return commentClient.getBlog(id).getResult();
